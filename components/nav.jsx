@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from "next/image";
 
 export default function Nav() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isNavOpen, setIsNavOpen] = useState(false);
+    const [profileData, setProfileData] = useState(null);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -15,6 +16,24 @@ export default function Nav() {
         setIsNavOpen(!isNavOpen);
         setIsMenuOpen(false);
     };
+
+     // Fetch data when the component mounts
+     useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const response = await fetch('https://fire-arena.onrender.com/dummy/profile/'); 
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+                const data = await response.json();
+                setProfileData(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchProfileData();
+    }, []); 
 
     return (
         <div>
@@ -27,7 +46,14 @@ export default function Nav() {
                     <div className="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
                         <button type="button" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown" data-dropdown-placement="bottom" onClick={() => toggleMenu()}>
                             <span className="sr-only">Open user menu</span>
+                            <div className='relative'>
                             <img className="w-8 h-8 rounded-full" src="/profile/icon/guest.png" alt="user photo" />
+                            {profileData && profileData.login ? (
+                            <span className="status bg-success bottom-0 left-5 absolute"></span>
+                            ) : (
+                                <span className="status bg-error bottom-0 left-5 absolute"></span>
+                            )}
+</div>
                         </button>
                         {isMenuOpen && (
                             // <div className="absolute right-0 top-15 z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600" id="user-dropdown"> 

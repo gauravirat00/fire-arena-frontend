@@ -4,13 +4,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --test: #1fe800;
 }
 
-@theme inline {
+
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-err: #e80000;
+  --color-success: #1fe800;
 }
 
 @media (prefers-color-scheme: dark) {
